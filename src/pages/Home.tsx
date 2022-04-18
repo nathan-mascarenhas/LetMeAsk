@@ -6,7 +6,7 @@ import { Button } from '../components/Button';
 import '../css/auth.scss';
 import { auth, database, firebase, provider, ref } from '../services/firebase';
 import { GoogleAuthProvider, signInWithPopup, getAuth } from 'firebase/auth';
-import { get } from 'firebase/database';
+import { get, onValue } from 'firebase/database';
 import { useAuth } from '../hooks/useAuth';
 import { FormEvent, useState } from 'react';
 
@@ -36,6 +36,13 @@ export function Home() {
             alert('Room does not exists.')
             return;
         }
+
+        if(onValue(roomRef, (room) => {const databaseRoom = room.val().endedAt}))
+        {
+            alert('Room already closed.');
+            return;
+        }
+
         navigate(`/rooms/${roomCode}`)
     }
 
