@@ -9,6 +9,7 @@ import { GoogleAuthProvider, signInWithPopup, getAuth } from 'firebase/auth';
 import { get, onValue } from 'firebase/database';
 import { useAuth } from '../hooks/useAuth';
 import { FormEvent, useState } from 'react';
+import toast, { Toaster } from 'react-hot-toast';
 
 export function Home() {
     const navigate = useNavigate();
@@ -33,13 +34,13 @@ export function Home() {
         const roomCheck = await get(roomRef)
 
         if (!roomCheck.exists()){
-            alert('Room does not exists.')
+            toast.error('Room does not exists.')
             return;
         }
 
         if(onValue(roomRef, (room) => {const databaseRoom = room.val().endedAt}))
         {
-            alert('Room already closed.');
+            toast.error('Room already closed.');
             return;
         }
 
@@ -47,7 +48,9 @@ export function Home() {
     }
 
     return(
+        
         <div id="page-auth">
+            <Toaster position="top-center"reverseOrder={false}/>
             <aside>
                 <img src={illustrationImg} alt="Ilustração simbolizando perguntas e respostas" />
                 <strong>Crie salas de Q&amp;A ao-vivo</strong>
